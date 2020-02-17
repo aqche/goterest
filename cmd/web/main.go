@@ -1,22 +1,22 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 )
 
-func main() {
-	mux := http.NewServeMux()
+type Goterest struct{}
 
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello World"))
-	})
+func main() {
+	goterest := &Goterest{}
 
 	server := &http.Server{
 		Addr:    ":4000",
-		Handler: mux,
+		Handler: goterest.routes(),
 	}
 
+	fmt.Printf("Starting server...")
 	err := server.ListenAndServe()
 	log.Fatal(err)
 }
