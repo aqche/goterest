@@ -56,4 +56,6 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 
 ## Acknowledgments
 
-* [Pinterest](https://www.pinterest.com/) - The inspiration for this site.
+* [pinterest](https://www.pinterest.com/) - The inspiration for this site.
+* [logohub.io](https://logohub.io/) - For the neat logo.
+* [favicon.io](https://favicon.io/) - For the matching favicon.
