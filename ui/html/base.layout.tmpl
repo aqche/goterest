@@ -1,0 +1,80 @@
+{{define "base"}}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Goterest</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="/static/main.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"
+    />
+    <script defer src="/static/main.js"></script>
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"
+    ></script>
+    <script
+      defer
+      src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"
+    ></script>
+  </head>
+
+  <body>
+    <nav class="navbar border-bottom-gray">
+      <div class="container">
+        <div class="navbar-brand">
+          <a class="navbar-item">
+            <img src="/static/logo.png" />
+          </a>
+          <a role="button" class="navbar-burger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </a>
+        </div>
+        <div class="navbar-menu border-bottom">
+          <div class="navbar-start">
+            <a class="navbar-item">
+              Home
+            </a>
+            <a class="navbar-item">
+              My Pins
+            </a>
+          </div>
+          <div class="navbar-end">
+            <div class="navbar-item">
+              <a class="button is-primary">Sign Up</a>
+            </div>
+            <div class="navbar-item">
+              <a class="button is-info">Log In</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <section class="section full-height">
+      <div class="container">
+        {{template "main" .}}
+      </div>
+    </section>
+    <footer class="footer">
+      <div class="content has-text-centered">
+        <p>
+          Made with <span class="has-text-danger">&#9829;</span> by aqche.
+          <a
+            href="https://github.com/aqche/goterest"
+            target="_blank"
+            class="has-text-black is-link"
+            ><i class="fab fa-github"></i
+          ></a>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+{{end}}

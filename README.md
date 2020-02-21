@@ -4,7 +4,7 @@ A simplified Pinterest clone built with Go.
 
 ## Features
 
-* TBD
+- TBD
 
 ## Getting Started
 
@@ -46,7 +46,7 @@ Feel free to submit a pull request!
 
 ## Authors
 
-* **aqche** - *Author* - [aqche](https://github.com/aqche)
+- **aqche** - _Author_ - [aqche](https://github.com/aqche)
 
 See also the list of [contributors](https://github.com/aqche/goterest/contributors) who participated in this project.
 
@@ -56,6 +56,6 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 
 ## Acknowledgments
 
-* [pinterest](https://www.pinterest.com/) - The inspiration for this site.
-* [logohub.io](https://logohub.io/) - For the neat logo.
-* [favicon.io](https://favicon.io/) - For the matching favicon.
+- [Pinterest](https://www.pinterest.com/) - The inspiration for this site.
+- [LogoHub](https://logohub.io/) - For the neat logo.
+- [favicon.io](https://favicon.io/) - For the matching favicon.

@@ -6,7 +6,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func (g *Goterest) routes() http.Handler {
+func (g *goterest) routes() http.Handler {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/", g.home).Methods("GET")

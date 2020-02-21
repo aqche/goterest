@@ -6,14 +6,14 @@ import (
 	"net/http"
 )
 
-type Goterest struct{}
+type goterest struct{}
 
 func main() {
-	goterest := &Goterest{}
+	app := &goterest{}
 
 	server := &http.Server{
 		Addr:    ":4000",
-		Handler: goterest.routes(),
+		Handler: app.routes(),
 	}
 
 	fmt.Printf("Starting server...")

@@ -1,0 +1,18 @@
+{{template "base" .}}
+
+{{define "main"}}
+
+{{if .}}
+  <div class="grid">
+    {{range .}}
+      <div class="box grid-item pin-sized">
+        <img class="pin-sized" src="{{.ImageURL}}" onerror="handleImgErr(this);" />
+        <p>Pinned by {{.Username}}</p>
+      </div>
+    {{end}}
+  </div>
+{{else}}
+  <p>No pins yet...</p>
+{{end}}
+
+{{end}}

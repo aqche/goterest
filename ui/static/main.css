@@ -1,0 +1,21 @@
+.border-bottom-gray {
+  border-bottom: 2px solid hsl(0, 0%, 96%);
+}
+
+.full-height {
+  height: auto;
+  min-height: 90vh;
+}
+
+.grid {
+  margin: 0 auto;
+}
+
+.pin-sized {
+  width: 238px;
+  height: auto;
+}
+
+.is-link:hover {
+  opacity: 0.6;
+}
