@@ -1,0 +1,20 @@
+{{template "base" .}}
+
+{{define "main"}}
+
+<form action="/create" method="POST">
+  <div class="field">
+    <label class="label">Image</label>
+    <div class="control">
+      <input class="input" type="text" />
+    </div>
+    <p class="help">Enter the URL for the image.</p>
+  </div>
+  <div class="field">
+    <div class="control">
+      <input class="button is-primary" type="submit" value="Create" />
+    </div>
+  </div>
+</form>
+
+{{end}}

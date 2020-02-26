@@ -2,9 +2,9 @@
 
 {{define "main"}}
 
-{{if .}}
+{{if .Pins}}
   <div class="grid">
-    {{range .}}
+    {{range .Pins}}
       <div class="box grid-item pin-sized">
         <img class="pin-sized" src="{{.ImageURL}}" onerror="handleImgErr(this);" />
         <p>Pinned by {{.Username}}</p>

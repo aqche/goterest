@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 
@@ -52,7 +53,7 @@ func (g *goterest) home(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	files := []string{"./ui/html/home.page.tmpl", "./ui/html/base.layout.tmpl"}
+	files := []string{"./ui/html/pins.page.tmpl", "./ui/html/base.layout.tmpl"}
 
 	tmpl, err := template.ParseFiles(files...)
 	if err != nil {
@@ -60,14 +61,34 @@ func (g *goterest) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = tmpl.Execute(w, pins)
+	td := templateData{
+		Title: "Pins",
+		Pins:  pins,
+	}
+
+	err = tmpl.Execute(w, td)
 	if err != nil {
 		w.Write([]byte(err.Error()))
 	}
 }
 
 func (g *goterest) createForm(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("createForm"))
+	files := []string{"./ui/html/create.page.tmpl", "./ui/html/base.layout.tmpl"}
+
+	tmpl, err := template.ParseFiles(files...)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	td := templateData{
+		Title: "Create Pin",
+	}
+
+	err = tmpl.Execute(w, td)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+	}
 }
 
 func (g *goterest) create(w http.ResponseWriter, r *http.Request) {
@@ -79,7 +100,22 @@ func (g *goterest) delete(w http.ResponseWriter, r *http.Request) {
 }
 
 func (g *goterest) loginForm(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("loginForm"))
+	files := []string{"./ui/html/login.page.tmpl", "./ui/html/base.layout.tmpl"}
+
+	tmpl, err := template.ParseFiles(files...)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	td := templateData{
+		Title: "Log In",
+	}
+
+	err = tmpl.Execute(w, td)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+	}
 }
 
 func (g *goterest) login(w http.ResponseWriter, r *http.Request) {
@@ -91,7 +127,22 @@ func (g *goterest) logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func (g *goterest) registerForm(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("registerForm"))
+	files := []string{"./ui/html/register.page.tmpl", "./ui/html/base.layout.tmpl"}
+
+	tmpl, err := template.ParseFiles(files...)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	td := templateData{
+		Title: "Register",
+	}
+
+	err = tmpl.Execute(w, td)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+	}
 }
 
 func (g *goterest) register(w http.ResponseWriter, r *http.Request) {
@@ -101,5 +152,21 @@ func (g *goterest) register(w http.ResponseWriter, r *http.Request) {
 func (g *goterest) user(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	username := vars["username"]
-	w.Write([]byte(username))
+
+	files := []string{"./ui/html/pins.page.tmpl", "./ui/html/base.layout.tmpl"}
+
+	tmpl, err := template.ParseFiles(files...)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	td := templateData{
+		Title: fmt.Sprintf("%s's Pins", username),
+	}
+
+	err = tmpl.Execute(w, td)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+	}
 }
