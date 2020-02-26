@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/aqche/goterest/pkg/models"
+	"github.com/gorilla/mux"
 )
 
 func (g *goterest) home(w http.ResponseWriter, r *http.Request) {
@@ -63,4 +64,42 @@ func (g *goterest) home(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.Write([]byte(err.Error()))
 	}
+}
+
+func (g *goterest) createForm(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("createForm"))
+}
+
+func (g *goterest) create(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("create"))
+}
+
+func (g *goterest) delete(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("delete"))
+}
+
+func (g *goterest) loginForm(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("loginForm"))
+}
+
+func (g *goterest) login(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("login"))
+}
+
+func (g *goterest) logout(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("logout"))
+}
+
+func (g *goterest) registerForm(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("registerForm"))
+}
+
+func (g *goterest) register(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("register"))
+}
+
+func (g *goterest) user(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	username := vars["username"]
+	w.Write([]byte(username))
 }
