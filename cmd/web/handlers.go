@@ -69,7 +69,14 @@ func (g *goterest) createForm(w http.ResponseWriter, r *http.Request) {
 }
 
 func (g *goterest) create(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("create"))
+	err := r.ParseForm()
+	if err != nil {
+		w.Write([]byte("error parsing form"))
+	}
+
+	image := r.PostForm.Get("image")
+
+	fmt.Fprintf(w, "image: %s", image)
 }
 
 func (g *goterest) delete(w http.ResponseWriter, r *http.Request) {
@@ -85,7 +92,15 @@ func (g *goterest) loginForm(w http.ResponseWriter, r *http.Request) {
 }
 
 func (g *goterest) login(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("login"))
+	err := r.ParseForm()
+	if err != nil {
+		w.Write([]byte("error parsing form"))
+	}
+
+	username := r.PostForm.Get("username")
+	password := r.PostForm.Get("password")
+
+	fmt.Fprintf(w, "username: %s, password: %s", username, password)
 }
 
 func (g *goterest) logout(w http.ResponseWriter, r *http.Request) {
@@ -101,7 +116,16 @@ func (g *goterest) registerForm(w http.ResponseWriter, r *http.Request) {
 }
 
 func (g *goterest) register(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("register"))
+	err := r.ParseForm()
+	if err != nil {
+		w.Write([]byte("error parsing form"))
+	}
+
+	username := r.PostForm.Get("username")
+	password := r.PostForm.Get("password")
+	confirmPassword := r.PostForm.Get("confirm-password")
+
+	fmt.Fprintf(w, "username: %s, password: %s, confirmPassword: %s", username, password, confirmPassword)
 }
 
 func (g *goterest) user(w http.ResponseWriter, r *http.Request) {

@@ -40,7 +40,7 @@ func (g *goterest) loadTemplates() error {
 func (g *goterest) renderTemplate(w http.ResponseWriter, name string, td templateData) {
 	tmpl, ok := g.templates[name]
 	if !ok {
-		w.Write([]byte("invalid template"))
+		w.Write([]byte("error invalid template"))
 		return
 	}
 
