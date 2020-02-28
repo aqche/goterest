@@ -1,16 +1,19 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 	"path/filepath"
 
+	"github.com/aqche/goterest/pkg/forms"
 	"github.com/aqche/goterest/pkg/models"
 )
 
 type templateData struct {
 	Title string
 	Pins  []models.Pin
+	Form  *forms.Form
 }
 
 func (g *goterest) loadTemplates() error {
@@ -40,12 +43,12 @@ func (g *goterest) loadTemplates() error {
 func (g *goterest) renderTemplate(w http.ResponseWriter, name string, td templateData) {
 	tmpl, ok := g.templates[name]
 	if !ok {
-		w.Write([]byte("error invalid template"))
+		http.Error(w, fmt.Sprintf("invalid template %q", name), http.StatusInternalServerError)
 		return
 	}
 
 	err := tmpl.Execute(w, td)
 	if err != nil {
-		w.Write([]byte(err.Error()))
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }

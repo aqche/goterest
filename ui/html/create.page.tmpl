@@ -2,19 +2,24 @@
 
 {{define "main"}}
 
-<form action="/create" method="POST">
-  <div class="field">
-    <label class="label">Image</label>
-    <div class="control">
-      <input class="input" type="text" name="image" />
+{{with .Form}}
+  <form action="/create" method="POST">
+    <div class="field">
+      <label class="label">Image URL</label>
+      <div class="control">
+        <input class="input {{if index .Errors "image-url"}} is-danger {{end}}"
+        type="text" name="image-url" />
+      </div>
+      {{range index .Errors "image-url"}}
+        <p class="help is-danger">{{.}}</p>
+      {{end}}
     </div>
-    <p class="help">Enter the URL for the image.</p>
-  </div>
-  <div class="field">
-    <div class="control">
-      <input class="button is-primary" type="submit" value="Create" />
+    <div class="field">
+      <div class="control">
+        <input class="button is-primary" type="submit" value="Create" />
+      </div>
     </div>
-  </div>
-</form>
+  </form>
+{{end}}
 
 {{end}}

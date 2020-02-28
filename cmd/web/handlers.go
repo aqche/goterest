@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/aqche/goterest/pkg/forms"
 	"github.com/aqche/goterest/pkg/models"
 	"github.com/gorilla/mux"
 )
@@ -63,6 +64,7 @@ func (g *goterest) home(w http.ResponseWriter, r *http.Request) {
 func (g *goterest) createForm(w http.ResponseWriter, r *http.Request) {
 	td := templateData{
 		Title: "Create Pin",
+		Form:  forms.NewForm(nil),
 	}
 
 	g.renderTemplate(w, "create.page.tmpl", td)
@@ -71,12 +73,24 @@ func (g *goterest) createForm(w http.ResponseWriter, r *http.Request) {
 func (g *goterest) create(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
-		w.Write([]byte("error parsing form"))
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
-	image := r.PostForm.Get("image")
+	form := forms.NewForm(r.PostForm)
+	form.ValidateRequired("image-url")
+	form.ValidateURL("image-url")
 
-	fmt.Fprintf(w, "image: %s", image)
+	if form.ContainsErrors() {
+		td := templateData{
+			Title: "Create Pin",
+			Form:  form,
+		}
+		g.renderTemplate(w, "create.page.tmpl", td)
+		return
+	}
+
+	fmt.Fprintf(w, "image: %s", form.Values.Get("image-url"))
 }
 
 func (g *goterest) delete(w http.ResponseWriter, r *http.Request) {
@@ -86,6 +100,7 @@ func (g *goterest) delete(w http.ResponseWriter, r *http.Request) {
 func (g *goterest) loginForm(w http.ResponseWriter, r *http.Request) {
 	td := templateData{
 		Title: "Log In",
+		Form:  forms.NewForm(nil),
 	}
 
 	g.renderTemplate(w, "login.page.tmpl", td)
@@ -94,13 +109,24 @@ func (g *goterest) loginForm(w http.ResponseWriter, r *http.Request) {
 func (g *goterest) login(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
-		w.Write([]byte("error parsing form"))
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
-	username := r.PostForm.Get("username")
-	password := r.PostForm.Get("password")
+	form := forms.NewForm(r.PostForm)
+	form.ValidateRequired("username")
+	form.ValidateRequired("password")
 
-	fmt.Fprintf(w, "username: %s, password: %s", username, password)
+	if form.ContainsErrors() {
+		td := templateData{
+			Title: "Log In",
+			Form:  form,
+		}
+		g.renderTemplate(w, "login.page.tmpl", td)
+		return
+	}
+
+	fmt.Fprintf(w, "username: %s, password: %s", form.Values.Get("username"), form.Values.Get("password"))
 }
 
 func (g *goterest) logout(w http.ResponseWriter, r *http.Request) {
@@ -110,6 +136,7 @@ func (g *goterest) logout(w http.ResponseWriter, r *http.Request) {
 func (g *goterest) registerForm(w http.ResponseWriter, r *http.Request) {
 	td := templateData{
 		Title: "Register",
+		Form:  forms.NewForm(nil),
 	}
 
 	g.renderTemplate(w, "register.page.tmpl", td)
@@ -118,14 +145,27 @@ func (g *goterest) registerForm(w http.ResponseWriter, r *http.Request) {
 func (g *goterest) register(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
-		w.Write([]byte("error parsing form"))
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
-	username := r.PostForm.Get("username")
-	password := r.PostForm.Get("password")
-	confirmPassword := r.PostForm.Get("confirm-password")
+	form := forms.NewForm(r.PostForm)
+	form.ValidateRequired("username")
+	form.ValidateRequired("password")
+	form.ValidateRequired("confirm-password")
+	form.ValidateMinLength("password", 6)
+	form.ValidateMatch("confirm-password", "password")
 
-	fmt.Fprintf(w, "username: %s, password: %s, confirmPassword: %s", username, password, confirmPassword)
+	if form.ContainsErrors() {
+		td := templateData{
+			Title: "Register",
+			Form:  form,
+		}
+		g.renderTemplate(w, "register.page.tmpl", td)
+		return
+	}
+
+	fmt.Fprintf(w, "username: %s, password: %s, confirmPassword: %s", form.Values.Get("username"), form.Values.Get("password"), form.Values.Get("confirm-password"))
 }
 
 func (g *goterest) user(w http.ResponseWriter, r *http.Request) {
@@ -134,6 +174,7 @@ func (g *goterest) user(w http.ResponseWriter, r *http.Request) {
 
 	td := templateData{
 		Title: fmt.Sprintf("%s's Pins", username),
+		Pins:  []models.Pin{},
 	}
 
 	g.renderTemplate(w, "pins.page.tmpl", td)
