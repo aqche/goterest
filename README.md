@@ -12,7 +12,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-To run this application you need [Go](https://golang.org/).
+To run this application you need [Go](https://golang.org/) and [PostgreSQL](https://www.postgresql.org/).
 
 ### Local Setup
 
@@ -20,6 +20,21 @@ Clone the project.
 
 ```
 git clone https://github.com/aqche/goterest.git
+```
+
+Setup a PostgreSQL database.
+
+```
+sudo -u postgres createdb goterest
+sudo -u postgres psql -d goterest -f setup.sql
+```
+
+Create a role for working with the new database.
+
+```
+sudo -u postgres psql -d goterest
+postgres=#CREATE USER <user> WITH ENCRYPTED PASSWORD '<password>';
+postgres=#GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <user>;
 ```
 
 Start up the Go application.
