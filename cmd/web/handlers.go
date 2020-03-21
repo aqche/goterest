@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -53,21 +54,17 @@ func (g *goterest) home(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	td := templateData{
+	g.renderTemplate(w, "pins.page.tmpl", templateData{
 		Title: "Pins",
 		Pins:  pins,
-	}
-
-	g.renderTemplate(w, "pins.page.tmpl", td)
+	})
 }
 
 func (g *goterest) createForm(w http.ResponseWriter, r *http.Request) {
-	td := templateData{
+	g.renderTemplate(w, "create.page.tmpl", templateData{
 		Title: "Create Pin",
 		Form:  forms.NewForm(nil),
-	}
-
-	g.renderTemplate(w, "create.page.tmpl", td)
+	})
 }
 
 func (g *goterest) create(w http.ResponseWriter, r *http.Request) {
@@ -82,11 +79,10 @@ func (g *goterest) create(w http.ResponseWriter, r *http.Request) {
 	form.ValidateURL("image-url")
 
 	if form.ContainsErrors() {
-		td := templateData{
+		g.renderTemplate(w, "create.page.tmpl", templateData{
 			Title: "Create Pin",
 			Form:  form,
-		}
-		g.renderTemplate(w, "create.page.tmpl", td)
+		})
 		return
 	}
 
@@ -98,12 +94,10 @@ func (g *goterest) delete(w http.ResponseWriter, r *http.Request) {
 }
 
 func (g *goterest) loginForm(w http.ResponseWriter, r *http.Request) {
-	td := templateData{
+	g.renderTemplate(w, "login.page.tmpl", templateData{
 		Title: "Log In",
 		Form:  forms.NewForm(nil),
-	}
-
-	g.renderTemplate(w, "login.page.tmpl", td)
+	})
 }
 
 func (g *goterest) login(w http.ResponseWriter, r *http.Request) {
@@ -118,11 +112,10 @@ func (g *goterest) login(w http.ResponseWriter, r *http.Request) {
 	form.ValidateRequired("password")
 
 	if form.ContainsErrors() {
-		td := templateData{
+		g.renderTemplate(w, "login.page.tmpl", templateData{
 			Title: "Log In",
 			Form:  form,
-		}
-		g.renderTemplate(w, "login.page.tmpl", td)
+		})
 		return
 	}
 
@@ -134,12 +127,10 @@ func (g *goterest) logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func (g *goterest) registerForm(w http.ResponseWriter, r *http.Request) {
-	td := templateData{
+	g.renderTemplate(w, "register.page.tmpl", templateData{
 		Title: "Register",
 		Form:  forms.NewForm(nil),
-	}
-
-	g.renderTemplate(w, "register.page.tmpl", td)
+	})
 }
 
 func (g *goterest) register(w http.ResponseWriter, r *http.Request) {
@@ -157,25 +148,36 @@ func (g *goterest) register(w http.ResponseWriter, r *http.Request) {
 	form.ValidateMatch("confirm-password", "password")
 
 	if form.ContainsErrors() {
-		td := templateData{
+		g.renderTemplate(w, "register.page.tmpl", templateData{
 			Title: "Register",
 			Form:  form,
-		}
-		g.renderTemplate(w, "register.page.tmpl", td)
+		})
 		return
 	}
 
-	fmt.Fprintf(w, "username: %s, password: %s, confirmPassword: %s", form.Values.Get("username"), form.Values.Get("password"), form.Values.Get("confirm-password"))
+	err = g.users.Create(form.Values.Get("username"), form.Values.Get("password"))
+	if err != nil {
+		if errors.Is(err, models.ErrUserExists) {
+			form.Errors["username"] = append(form.Errors["username"], "The username is already taken.")
+			g.renderTemplate(w, "register.page.tmpl", templateData{
+				Title: "Register",
+				Form:  form,
+			})
+		} else {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func (g *goterest) user(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	username := vars["username"]
 
-	td := templateData{
+	g.renderTemplate(w, "pins.page.tmpl", templateData{
 		Title: fmt.Sprintf("%s's Pins", username),
 		Pins:  []models.Pin{},
-	}
-
-	g.renderTemplate(w, "pins.page.tmpl", td)
+	})
 }

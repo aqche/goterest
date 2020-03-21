@@ -35,6 +35,7 @@ Create a role for working with the new database.
 sudo -u postgres psql -d goterest
 postgres=#CREATE USER <user> WITH ENCRYPTED PASSWORD '<password>';
 postgres=#GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <user>;
+postgres=#GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO <user>;
 ```
 
 Start up the Go application.
