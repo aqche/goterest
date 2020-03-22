@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/aqche/goterest/pkg/forms"
 	"github.com/aqche/goterest/pkg/models"
@@ -155,7 +156,7 @@ func (g *goterest) register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = g.users.Create(form.Values.Get("username"), form.Values.Get("password"))
+	err = g.users.Create(strings.ToLower(form.Values.Get("username")), form.Values.Get("password"))
 	if err != nil {
 		if errors.Is(err, models.ErrUserExists) {
 			form.Errors["username"] = append(form.Errors["username"], "The username is already taken.")
