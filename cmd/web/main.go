@@ -8,11 +8,13 @@ import (
 	"net/http"
 
 	"github.com/aqche/goterest/pkg/models/postgres"
+	"github.com/gorilla/sessions"
 
 	_ "github.com/lib/pq"
 )
 
 type goterest struct {
+	store     *sessions.CookieStore
 	templates map[string]*template.Template
 	users     postgres.UserModel
 	pins      postgres.PinModel
@@ -31,6 +33,7 @@ func main() {
 	}
 
 	app := &goterest{
+		store: sessions.NewCookieStore([]byte("test-session-key")),
 		users: postgres.UserModel{DB: db},
 		pins:  postgres.PinModel{DB: db},
 	}

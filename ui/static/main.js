@@ -7,6 +7,14 @@ navbarBurger.addEventListener("click", () => {
   navbarMenu.classList.toggle("is-active");
 });
 
+// Notification Deletion
+const deleteButtons = document.querySelectorAll(".delete");
+deleteButtons.forEach(deleteButton => {
+  deleteButton.addEventListener("click", () => {
+    deleteButton.parentNode.remove();
+  });
+});
+
 // Masonry Setup
 let masonry;
 

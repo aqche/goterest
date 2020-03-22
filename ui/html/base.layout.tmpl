@@ -58,6 +58,12 @@
     </nav>
     <section class="section full-height">
       <div class="container">
+        {{range .Flashes}}
+          <div class="notification is-primary">
+            <button class="delete"></button>
+            {{.}}
+          </div>
+        {{end}}
         <h1 class="title">{{.Title}}</h1>
         {{template "main" .}}
       </div>

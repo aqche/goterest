@@ -11,9 +11,10 @@ import (
 )
 
 type templateData struct {
-	Title string
-	Pins  []models.Pin
-	Form  *forms.Form
+	Flashes []interface{}
+	Title   string
+	Pins    []models.Pin
+	Form    *forms.Form
 }
 
 func (g *goterest) loadTemplates() error {
@@ -40,14 +41,28 @@ func (g *goterest) loadTemplates() error {
 	return nil
 }
 
-func (g *goterest) renderTemplate(w http.ResponseWriter, name string, td templateData) {
+func (g *goterest) renderTemplate(w http.ResponseWriter, r *http.Request, name string, td *templateData) {
 	tmpl, ok := g.templates[name]
 	if !ok {
 		http.Error(w, fmt.Sprintf("invalid template %q", name), http.StatusInternalServerError)
 		return
 	}
 
-	err := tmpl.Execute(w, td)
+	session, err := g.store.Get(r, "goterest")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	td.Flashes = session.Flashes()
+
+	err = session.Save(r, w)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	err = tmpl.Execute(w, td)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
