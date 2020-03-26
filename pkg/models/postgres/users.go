@@ -34,3 +34,27 @@ func (m *UserModel) Create(username string, password string) error {
 
 	return nil
 }
+
+func (m *UserModel) ValidatePassword(username string, password string) (bool, error) {
+	var passwordHash []byte
+
+	stmt := "SELECT password FROM users WHERE username = $1"
+
+	err := m.DB.QueryRow(stmt, username).Scan(&passwordHash)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return false, models.ErrUserNotFound
+		}
+		return false, err
+	}
+
+	err = bcrypt.CompareHashAndPassword(passwordHash, []byte(password))
+	if err != nil {
+		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
+			return false, nil
+		}
+		return false, err
+	}
+
+	return true, nil
+}

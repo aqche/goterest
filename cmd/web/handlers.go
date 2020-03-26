@@ -120,7 +120,44 @@ func (g *goterest) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "username: %s, password: %s", form.Values.Get("username"), form.Values.Get("password"))
+	validPassword, err := g.users.ValidatePassword(form.Values.Get("username"), form.Values.Get("password"))
+	if err != nil {
+		if errors.Is(err, models.ErrUserNotFound) {
+			form.Errors["login"] = append(form.Errors["login"], "Invalid username or password.")
+			g.renderTemplate(w, r, "login.page.tmpl", &templateData{
+				Title: "Log In",
+				Form:  form,
+			})
+		} else {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	if !validPassword {
+		form.Errors["login"] = append(form.Errors["login"], "Invalid username or password.")
+		g.renderTemplate(w, r, "login.page.tmpl", &templateData{
+			Title: "Log In",
+			Form:  form,
+		})
+		return
+	}
+
+	session, err := g.store.Get(r, "goterest")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	session.AddFlash("Successfully logged in.")
+
+	err = session.Save(r, w)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func (g *goterest) logout(w http.ResponseWriter, r *http.Request) {
