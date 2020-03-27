@@ -12,6 +12,7 @@ import (
 
 type templateData struct {
 	Flashes []interface{}
+	User    interface{}
 	Title   string
 	Pins    []models.Pin
 	Form    *forms.Form
@@ -54,6 +55,7 @@ func (g *goterest) renderTemplate(w http.ResponseWriter, r *http.Request, name s
 		return
 	}
 
+	td.User = session.Values["user"]
 	td.Flashes = session.Flashes()
 
 	err = session.Save(r, w)

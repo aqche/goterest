@@ -120,7 +120,7 @@ func (g *goterest) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	validPassword, err := g.users.ValidatePassword(form.Values.Get("username"), form.Values.Get("password"))
+	validPassword, err := g.users.ValidatePassword(strings.ToLower(form.Values.Get("username")), form.Values.Get("password"))
 	if err != nil {
 		if errors.Is(err, models.ErrUserNotFound) {
 			form.Errors["login"] = append(form.Errors["login"], "Invalid username or password.")
@@ -149,6 +149,7 @@ func (g *goterest) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	session.Values["user"] = strings.ToLower(form.Values.Get("username"))
 	session.AddFlash("Successfully logged in.")
 
 	err = session.Save(r, w)
@@ -161,7 +162,22 @@ func (g *goterest) login(w http.ResponseWriter, r *http.Request) {
 }
 
 func (g *goterest) logout(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("logout"))
+	session, err := g.store.Get(r, "goterest")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	session.Values["user"] = nil
+	session.AddFlash("Successfully logged out.")
+
+	err = session.Save(r, w)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func (g *goterest) registerForm(w http.ResponseWriter, r *http.Request) {
