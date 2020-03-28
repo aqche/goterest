@@ -10,14 +10,20 @@ func (g *goterest) routes() http.Handler {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/", g.home).Methods("GET")
-	r.Handle("/create", g.loginRequired(http.HandlerFunc(g.createForm))).Methods("GET")
-	r.Handle("/create", g.loginRequired(http.HandlerFunc(g.create))).Methods("POST")
-	r.Handle("/delete", g.loginRequired(http.HandlerFunc(g.delete))).Methods("POST")
-	r.HandleFunc("/login", g.loginForm).Methods("GET")
-	r.HandleFunc("/login", g.login).Methods("POST")
-	r.Handle("/logout", g.loginRequired(http.HandlerFunc(g.logout))).Methods("POST")
-	r.HandleFunc("/register", g.registerForm).Methods("GET")
-	r.HandleFunc("/register", g.register).Methods("POST")
+
+	r.Handle("/create", g.requireAuthenticated(http.HandlerFunc(g.createForm))).Methods("GET")
+	r.Handle("/create", g.requireAuthenticated(http.HandlerFunc(g.create))).Methods("POST")
+
+	r.Handle("/delete", g.requireAuthenticated(http.HandlerFunc(g.delete))).Methods("POST")
+
+	r.Handle("/login", g.requireUnauthenticated(http.HandlerFunc(g.loginForm))).Methods("GET")
+	r.Handle("/login", g.requireUnauthenticated(http.HandlerFunc(g.login))).Methods("POST")
+
+	r.Handle("/logout", g.requireAuthenticated(http.HandlerFunc(g.logout))).Methods("POST")
+
+	r.Handle("/register", g.requireUnauthenticated(http.HandlerFunc(g.registerForm))).Methods("GET")
+	r.Handle("/register", g.requireUnauthenticated(http.HandlerFunc(g.register))).Methods("POST")
+
 	r.HandleFunc("/user/{username}", g.user).Methods("GET")
 
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
