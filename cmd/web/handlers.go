@@ -120,9 +120,9 @@ func (g *goterest) login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	validPassword, err := g.users.ValidatePassword(strings.ToLower(form.Values.Get("username")), form.Values.Get("password"))
+	err = g.users.ValidatePassword(strings.ToLower(form.Values.Get("username")), form.Values.Get("password"))
 	if err != nil {
-		if errors.Is(err, models.ErrUserNotFound) {
+		if errors.Is(err, models.ErrUserNotFound) || errors.Is(err, models.ErrInvalidPassword) {
 			form.Errors["login"] = append(form.Errors["login"], "Invalid username or password.")
 			g.renderTemplate(w, r, "login.page.tmpl", &templateData{
 				Title: "Log In",
@@ -131,15 +131,6 @@ func (g *goterest) login(w http.ResponseWriter, r *http.Request) {
 		} else {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
-		return
-	}
-
-	if !validPassword {
-		form.Errors["login"] = append(form.Errors["login"], "Invalid username or password.")
-		g.renderTemplate(w, r, "login.page.tmpl", &templateData{
-			Title: "Log In",
-			Form:  form,
-		})
 		return
 	}
 
