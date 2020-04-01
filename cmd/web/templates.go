@@ -14,7 +14,7 @@ type templateData struct {
 	Flashes []interface{}
 	User    interface{}
 	Title   string
-	Pins    []models.Pin
+	Pins    []*models.Pin
 	Form    *forms.Form
 }
 
