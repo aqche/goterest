@@ -7,7 +7,7 @@
     {{range .Pins}}
       <div class="box grid-item pin-size">
         <img class="pin-size" src="{{.ImageURL}}" onerror="handleImgErr(this);" />
-        <p>Pinned by {{.Username}}</p>
+        <p>Pinned by <a class="has-text-primary" href="/user/{{.Username}}">{{.Username}}</a></p>
       </div>
     {{end}}
   </div>

@@ -50,7 +50,29 @@ func (g *goterest) create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "image: %s", form.Values.Get("image-url"))
+	session, err := g.store.Get(r, "goterest")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	username := session.Values["user"]
+
+	err = g.pins.Create(form.Values.Get("image-url"), username.(string))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	session.AddFlash("Successfully created pin.")
+
+	err = session.Save(r, w)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func (g *goterest) delete(w http.ResponseWriter, r *http.Request) {
