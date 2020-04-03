@@ -14,7 +14,7 @@ func (g *goterest) routes() http.Handler {
 	r.Handle("/create", g.requireAuthenticated(http.HandlerFunc(g.createForm))).Methods("GET")
 	r.Handle("/create", g.requireAuthenticated(http.HandlerFunc(g.create))).Methods("POST")
 
-	r.Handle("/delete", g.requireAuthenticated(http.HandlerFunc(g.delete))).Methods("POST")
+	r.Handle("/delete/{id}", g.requireAuthenticated(http.HandlerFunc(g.delete))).Methods("POST")
 
 	r.Handle("/login", g.requireUnauthenticated(http.HandlerFunc(g.loginForm))).Methods("GET")
 	r.Handle("/login", g.requireUnauthenticated(http.HandlerFunc(g.login))).Methods("POST")

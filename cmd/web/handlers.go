@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/aqche/goterest/pkg/forms"
@@ -76,7 +77,15 @@ func (g *goterest) create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (g *goterest) delete(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("delete"))
+	vars := mux.Vars(r)
+
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Write([]byte(fmt.Sprintf("delete %d", id)))
 }
 
 func (g *goterest) loginForm(w http.ResponseWriter, r *http.Request) {
@@ -218,6 +227,7 @@ func (g *goterest) register(w http.ResponseWriter, r *http.Request) {
 
 func (g *goterest) user(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
+
 	username := strings.ToLower(vars["username"])
 
 	pins, err := g.pins.GetAllByUsername(username)
