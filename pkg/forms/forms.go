@@ -3,6 +3,7 @@ package forms
 import (
 	"fmt"
 	"net/url"
+	"strings"
 )
 
 type Form struct {
@@ -33,6 +34,17 @@ func (f *Form) ValidateURL(field string) {
 	_, err := url.ParseRequestURI(value)
 	if err != nil {
 		f.Errors[field] = append(f.Errors[field], "A valid URL is required.")
+	}
+}
+
+func (f *Form) ValidateImgExtension(field string) {
+	value := f.Values.Get(field)
+	if value == "" {
+		return
+	}
+
+	if !strings.HasSuffix(value, ".jpg") && !strings.HasSuffix(value, ".png") && !strings.HasSuffix(value, ".gif") {
+		f.Errors[field] = append(f.Errors[field], "A value ending with .jpg, .png, or .gif is required.")
 	}
 }
 

@@ -42,6 +42,7 @@ func (g *goterest) create(w http.ResponseWriter, r *http.Request) {
 	form := forms.NewForm(r.PostForm)
 	form.ValidateRequired("image-url")
 	form.ValidateURL("image-url")
+	form.ValidateImgExtension("image-url")
 
 	if form.ContainsErrors() {
 		g.renderTemplate(w, r, "create.page.tmpl", &templateData{
