@@ -230,6 +230,16 @@ func (g *goterest) user(w http.ResponseWriter, r *http.Request) {
 
 	username := strings.ToLower(vars["username"])
 
+	_, err := g.users.GetByUsername(username)
+	if err != nil {
+		if errors.Is(err, models.ErrUserNotFound) {
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		} else {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		return
+	}
+
 	pins, err := g.pins.GetAllByUsername(username)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
