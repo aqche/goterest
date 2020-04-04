@@ -4,6 +4,7 @@
 
 {{with .Form}}
   <form action="/register" method="POST">
+    {{$.CSRFField}}
     <div class="field">
       <label class="label">Username</label>
       <div class="control">

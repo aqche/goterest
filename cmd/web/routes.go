@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"github.com/gorilla/csrf"
 	"github.com/gorilla/mux"
 )
 
@@ -29,5 +30,7 @@ func (g *goterest) routes() http.Handler {
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fileServer)).Methods("GET")
 
-	return r
+	csrfMiddleware := csrf.Protect([]byte("test-csrf-key"), csrf.Secure(false))
+
+	return csrfMiddleware(r)
 }

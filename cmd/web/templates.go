@@ -8,14 +8,16 @@ import (
 
 	"github.com/aqche/goterest/pkg/forms"
 	"github.com/aqche/goterest/pkg/models"
+	"github.com/gorilla/csrf"
 )
 
 type templateData struct {
-	Flashes []interface{}
-	User    interface{}
-	Title   string
-	Pins    []*models.Pin
-	Form    *forms.Form
+	Flashes   []interface{}
+	User      interface{}
+	Title     string
+	Pins      []*models.Pin
+	Form      *forms.Form
+	CSRFField template.HTML
 }
 
 func (g *goterest) loadTemplates() error {
@@ -57,6 +59,7 @@ func (g *goterest) renderTemplate(w http.ResponseWriter, r *http.Request, name s
 
 	td.User = session.Values["user"]
 	td.Flashes = session.Flashes()
+	td.CSRFField = csrf.TemplateField(r)
 
 	err = session.Save(r, w)
 	if err != nil {
