@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"database/sql"
+	"errors"
 
 	"github.com/aqche/goterest/pkg/models"
 )
@@ -19,6 +20,24 @@ func (m *PinModel) Create(imageURL string, username string) error {
 	}
 
 	return nil
+}
+
+func (m *PinModel) Get(id int) (*models.Pin, error) {
+	pin := &models.Pin{}
+
+	stmt := "SELECT pin_id, image_url, username FROM pins WHERE pin_id = $1"
+
+	row := m.DB.QueryRow(stmt, id)
+
+	err := row.Scan(&pin.ID, &pin.ImageURL, &pin.Username)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, models.ErrPinNotFound
+		}
+		return nil, err
+	}
+
+	return pin, nil
 }
 
 func (m *PinModel) GetAll() ([]*models.Pin, error) {
@@ -71,4 +90,15 @@ func (m *PinModel) GetAllByUsername(username string) ([]*models.Pin, error) {
 	}
 
 	return pins, nil
+}
+
+func (m *PinModel) Delete(id int) error {
+	stmt := "DELETE FROM pins WHERE pin_id = $1"
+
+	_, err := m.DB.Exec(stmt, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
