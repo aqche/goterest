@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -67,8 +68,12 @@ func (g *goterest) renderTemplate(w http.ResponseWriter, r *http.Request, name s
 		return
 	}
 
-	err = tmpl.Execute(w, td)
+	buffer := &bytes.Buffer{}
+
+	err = tmpl.Execute(buffer, td)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+
+	buffer.WriteTo(w)
 }
