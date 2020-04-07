@@ -7,14 +7,26 @@
     {{range .Pins}}
       <div class="box grid-item pin-size">
         <img class="pin-size" src="{{.ImageURL}}" onerror="handleImgErr(this);" />
-        <p>Pinned by <a class="has-text-primary" href="/user/{{.Username}}">{{.Username}}</a></p>
+        <p>
+          Pinned by
+          <a class="has-text-primary" href="/user/{{.Username}}">{{.Username}}</a>
+        </p>
         <div class="field is-grouped">
-          <a class="control button is-primary is-outlined is-small margin-top-5" href="{{.ImageURL}}" target="_blank">Source</a>
+          <a
+            class="control button is-primary is-outlined is-small margin-top-5"
+            href="{{.ImageURL}}"
+            target="_blank"
+            >Source</a
+          >
           {{if $.User}}
             {{if eq $.User .Username}}
               <form class="control margin-top-4" action="/delete/{{.ID}}" method="POST">
                 {{$.CSRFField}}
-                <input class="button is-danger is-outlined is-small" type="submit" value="Delete"/>
+                <input
+                  class="button is-danger is-outlined is-small"
+                  type="submit"
+                  value="Delete"
+                />
               </form>
             {{end}}
           {{end}}

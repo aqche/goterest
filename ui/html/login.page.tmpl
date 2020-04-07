@@ -8,8 +8,8 @@
     <div class="field">
       <label class="label">Username</label>
       <div class="control">
-        <input class="input {{if or (index .Errors "username") (index .Errors "login")}} is-danger {{end}}"
-        type="text" name="username" />
+        <input class="input {{if or (index .Errors "username") (index .Errors "login")}}
+        is-danger {{end}}" type="text" name="username" />
       </div>
       {{range index .Errors "username"}}
         <p class="help is-danger">{{.}}</p>
@@ -18,8 +18,8 @@
     <div class="field">
       <label class="label">Password</label>
       <div class="control">
-        <input class="input {{if or (index .Errors "password") (index .Errors "login")}} is-danger {{end}}"
-        type="password" name="password" />
+        <input class="input {{if or (index .Errors "password") (index .Errors "login")}}
+        is-danger {{end}}" type="password" name="password" />
       </div>
       {{range index .Errors "password"}}
         <p class="help is-danger">{{.}}</p>

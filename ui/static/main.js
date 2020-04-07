@@ -9,7 +9,7 @@ navbarBurger.addEventListener("click", () => {
 
 // Notification Deletion
 const deleteButtons = document.querySelectorAll(".delete");
-deleteButtons.forEach(deleteButton => {
+deleteButtons.forEach((deleteButton) => {
   deleteButton.addEventListener("click", () => {
     deleteButton.parentNode.remove();
   });
@@ -25,7 +25,7 @@ window.addEventListener("load", () => {
       itemSelector: ".grid-item",
       gutter: 10,
       fitWidth: true,
-      columnWidth: 238
+      columnWidth: 238,
     });
   }
 });
