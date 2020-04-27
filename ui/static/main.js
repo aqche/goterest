@@ -39,5 +39,5 @@ window.addEventListener("resize", () => {
 // Image Error Handling
 function handleImgErr(img) {
   img.onerror = undefined;
-  img.src = "https://via.placeholder.com/238x238?text=Image+Not+Found";
+  img.src = "/static/notfound.png";
 }
