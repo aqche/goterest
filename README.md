@@ -4,7 +4,10 @@ A simplified Pinterest clone built with Go.
 
 ## Features
 
-- TBD
+- Secure registration and authentication.
+- Create and delete pins.
+- View all pins.
+- View a specific user's pins.
 
 ## Getting Started
 
@@ -54,7 +57,8 @@ TBD
 
 ## Built With
 
-TBD
+- [Gorilla Web Toolkit](https://www.gorillatoolkit.org/) - Go Libraries for Routing, Session Management, and CSRF Protection
+- [Bulma](https://bulma.io/) - CSS Framework
 
 ## Contributing
 
