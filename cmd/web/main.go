@@ -21,7 +21,12 @@ type goterest struct {
 }
 
 func main() {
-	db, err := sql.Open("postgres", "user=goterest password=pass dbname=goterest")
+	config, err := getConfig()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	db, err := sql.Open("postgres", config.DatabaseURL)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +38,7 @@ func main() {
 	}
 
 	app := &goterest{
-		store: sessions.NewCookieStore([]byte("test-session-key")),
+		store: sessions.NewCookieStore([]byte(config.SessionKey)),
 		users: postgres.UserModel{DB: db},
 		pins:  postgres.PinModel{DB: db},
 	}
@@ -44,8 +49,8 @@ func main() {
 	}
 
 	server := &http.Server{
-		Addr:    ":4000",
-		Handler: app.routes(),
+		Addr:    fmt.Sprintf(":%s", config.Port),
+		Handler: app.routes(config.CSRFKey, config.Secure),
 	}
 
 	fmt.Printf("Starting server...")

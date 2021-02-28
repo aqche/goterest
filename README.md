@@ -41,15 +41,20 @@ postgres=#GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <user>;
 postgres=#GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO <user>;
 ```
 
+Configure the application with the required environment variables.
+
+```
+export DATABASE_URL="user=<user> password=<password> dbname=goterest"
+export SESSION_KEY="<session_key>"
+export CSRF_KEY="<csrf_key>"
+export ENV="DEV"
+```
+
 Start up the Go application.
 
 ```
 go run ./cmd/web/
 ```
-
-## Testing
-
-TBD
 
 ## Deployment
 

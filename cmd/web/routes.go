@@ -7,7 +7,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func (g *goterest) routes() http.Handler {
+func (g *goterest) routes(csrfKey string, secure bool) http.Handler {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/", g.home).Methods("GET")
@@ -30,7 +30,7 @@ func (g *goterest) routes() http.Handler {
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fileServer)).Methods("GET")
 
-	csrfMiddleware := csrf.Protect([]byte("test-csrf-key"), csrf.Secure(false))
+	csrfMiddleware := csrf.Protect([]byte(csrfKey), csrf.Secure(secure))
 
 	return csrfMiddleware(r)
 }
