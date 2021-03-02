@@ -4,7 +4,7 @@ A simplified Pinterest clone built with Go.
 
 ## Features
 
-- Secure registration and authentication.
+- Registration and authentication.
 - Create and delete pins.
 - View all pins.
 - View a specific user's pins.
@@ -21,20 +21,20 @@ To run this application you need [Go](https://golang.org/) and [PostgreSQL](http
 
 Clone the project.
 
-```
+```sh
 git clone https://github.com/aqche/goterest.git
 ```
 
 Setup a PostgreSQL database.
 
-```
+```sh
 sudo -u postgres createdb goterest
 sudo -u postgres psql -d goterest -f setup.sql
 ```
 
 Create a role for working with the new database.
 
-```
+```sh
 sudo -u postgres psql -d goterest
 postgres=#CREATE USER <user> WITH ENCRYPTED PASSWORD '<password>';
 postgres=#GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <user>;
@@ -43,7 +43,7 @@ postgres=#GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO <user>;
 
 Configure the application with the required environment variables.
 
-```
+```sh
 export DATABASE_URL="user=<user> password=<password> dbname=goterest"
 export SESSION_KEY="<session_key>"
 export CSRF_KEY="<csrf_key>"
@@ -52,7 +52,7 @@ export ENV="DEV"
 
 Start up the Go application.
 
-```
+```sh
 go run ./cmd/web/
 ```
 
