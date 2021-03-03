@@ -2,6 +2,8 @@
 
 A simplified Pinterest clone built with Go.
 
+![goterest.png](./goterest.png)
+
 ## Features
 
 - Registration and authentication.
