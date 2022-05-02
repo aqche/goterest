@@ -58,10 +58,6 @@ Start up the Go application.
 go run ./cmd/web/
 ```
 
-## Deployment
-
-TBD
-
 ## Built With
 
 - [Gorilla Web Toolkit](https://www.gorillatoolkit.org/) - Go Libraries for Routing, Session Management, and CSRF Protection
