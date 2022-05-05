@@ -38,17 +38,17 @@ Create a role for working with the new database.
 
 ```sh
 sudo -u postgres psql -d goterest
-postgres=#CREATE USER <user> WITH ENCRYPTED PASSWORD '<password>';
-postgres=#GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <user>;
-postgres=#GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO <user>;
+postgres=#CREATE USER <USER> WITH ENCRYPTED PASSWORD '<PASSWORD>';
+postgres=#GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <USER>;
+postgres=#GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO <USER>;
 ```
 
 Configure the application with the required environment variables.
 
 ```sh
-export DATABASE_URL="user=<user> password=<password> dbname=goterest"
-export SESSION_KEY="<session_key>"
-export CSRF_KEY="<csrf_key>"
+export DATABASE_URL="user=<USER> password=<PASSWORD> dbname=goterest"
+export SESSION_KEY="<SESSION_KEY>"
+export CSRF_KEY="<CSRF_KEY>"
 export ENV="DEV"
 ```
 
